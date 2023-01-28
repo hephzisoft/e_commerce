@@ -1,0 +1,16 @@
+
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<main class="home">
+    {% for product in products %}
+   <a href="{% url 'product-details' product.id %}"> <img src="{{ product.image}}" alt=""></a>
+
+    <p>{{product.name}}</p>
+    <p>{{product.price}}</p>
+
+
+
+   {% endfor %}
+</main>
+{% endblock content %}

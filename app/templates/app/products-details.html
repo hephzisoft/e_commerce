@@ -1,0 +1,67 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+  <img src="{{ product.image }} " alt="" />
+  <p>{{ product.name }}</p>
+  <p>{{ product.price }}</p>
+  <p>{{ product.description }}</p>
+
+  <form action="" method="POST">
+    {% csrf_token %}
+
+    <input name="add" type="submit" id="increase" data-action="add" value="Add" class="update-cart" />
+    <input type="hidden" name="product_id" value="{{ product.id }}" id="product-id" />
+    <p id="qty">1</p>
+    <input name="minus" id="decrease" data-action="remove" type="submit" value="Reduce" class="update-cart" />
+  </form>
+
+  <script>
+    $(document).ready(function () {
+      var qty = $('#qty')
+      var csrf_token = $('input[name=csrfmiddlewaretoken]').val()
+      var id = document.getElementById('product-id').value
+      var updateBtn = document.getElementsByClassName('update-cart')
+    
+      for (var i = 0; i < updateBtn.length; i++) {
+        updateBtn[i].addEventListener('click', function () {
+          var action = this.dataset.action
+          var btn = $(this)
+    
+          $.ajax({
+            url: '/update-cart/',
+            type: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf_token },
+            data: JSON.stringify({
+              id: id,
+              action: action
+            }),
+            dataType: 'json',
+            beforeSend: function () {
+              btn.attr('disabled', true)
+            },
+            success: function (response) {
+              if (response.qty <= 0 && action == 'remove') {
+                btn.attr('disabled', true)
+              }
+    
+              qty.html(response.qty)
+              btn.attr('disabled', false)
+            }
+          })
+        })
+      }
+      $.ajax({
+        url: '/get-qty/',
+        type: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf_token },
+        data: JSON.stringify({
+          id: id
+        }),
+        dataType: 'json',
+        success: function (response) {
+          qty.html(response.qty)
+        }
+      })
+    })
+  </script>
+{% endblock %}

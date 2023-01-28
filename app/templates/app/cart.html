@@ -1,0 +1,86 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+  <main class="cart">
+    <div class="cart-total">
+      <p class="cart-total-price"></p>
+      <p class="cart-total-item"></p>
+    </div>
+    {% for item in orderitem %}
+      <div class="cart-item">
+        <img src="{{ item.product.image }} " alt="" />
+        <p>{{ item.product.name }}</p>
+        <p>{{ item.product.price }}</p>
+
+        <form action="" method="POST">
+          {% csrf_token %}
+
+          <input name="add" type="submit" id="increase" data-action="add" value="Add" data-productId="{{ item.product.id }}" class="update-cart" />
+          <p id="qty" data-productId="{{ item.product.id }}">1</p>
+          <input name="minus" id="decrease" data-action="remove" type="submit" data-productId="{{ item.product.id }}" value="Reduce" class="update-cart" />
+        </form>
+      </div>
+    {% endfor %}
+  </main>
+
+  <script>
+    $(document).ready(function () {
+      var updateBtn = document.getElementsByClassName('update-cart')
+      var csrf_token = $('input[name=csrfmiddlewaretoken]').val()
+    
+      var productId = $('#qty').attr('data-productId')
+      console.log()
+      var qtys = $('#qty[data-productId=' + productId + ']')
+    
+      for (var i = 0; i < updateBtn.length; i++) {
+        updateBtn[i].addEventListener('click', function () {
+          var action = this.dataset.action
+          var btn = $(this)
+          var id = $(this).attr('data-productId')
+          var qty = $('#qty[data-productId=' + id + ']')
+    
+          $.ajax({
+            url: '/update-cart/',
+            type: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf_token },
+            data: JSON.stringify({
+              id: id,
+              action: action
+            }),
+            dataType: 'json',
+            beforeSend: function () {
+              btn.attr('disabled', true)
+            },
+            success: function (response) {
+              if (response.qty <= 0 && action == 'remove') {
+                btn.attr('disabled', true)
+              }
+    
+              qty.html(response.qty)
+    
+              btn.attr('disabled', false)
+            }
+          })
+        })
+      }
+    
+      $('.cart-item').each(function () {
+        var id = $(this).find('#qty').attr('data-productId')
+       
+        var qty = $(this).find('#qty')
+        console.log(qty.text())
+    
+        $.ajax({
+          url: '/cart-get-qty/',
+          type: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf_token },
+          data: JSON.stringify({ id: id }),
+          dataType: 'json',
+          success: function (response) {
+           qty.html(response.qty)
+          }
+        })
+      })
+    });
+  </script>
+{% endblock %}

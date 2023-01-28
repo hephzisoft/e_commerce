@@ -1,0 +1,20 @@
+databases:
+  - name: e_commerce
+    databaseName: e_commerce
+    user: e_commerce
+
+services:
+  - type: web
+    name: e_commerce
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn mysite.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mysite
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
