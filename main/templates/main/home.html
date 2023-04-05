@@ -1,0 +1,18 @@
+
+{% extends './index.html' %}
+{% load static %}
+{% block content %}
+
+<main class="container-fluid p-5 shop">
+    {% for product in products %}
+    <div class="card p-2" style="width: 18rem;">
+      <a href="{% url 'product-details' product.id %}"><img src="{{product.image}}" alt="" class="card-img-top" /></a>
+      <div class="card-body">
+        <h6 class="product-name">{{product.name}}</h6>
+        <h6 class="product-price">&#8358;{{product.price}}</h6>
+      </div>
+    </div>
+    {% endfor %}
+  </main>
+{% endblock content %}
+{% comment %} hwhiiwyiwiyi {% endcomment %}

@@ -1,0 +1,55 @@
+{% extends './index.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+<script src="{% static 'js/cart.js' %}"></script>
+<main class="cart container d-block pt-3 mt-5">
+  <div class="cart-header mx-3 d-md-flex justify-content-between">
+    <h3>Shopping cart </h3>
+    <h3>Total: <span class="cart-total-price"> &#8358;0</span></h3>
+
+  </div>
+  <div class="divider"></div>
+
+  <div class="all-cart-item d-block">
+    {% for item in orderitem %}
+    <div class="cart-item d-flex mt-3 mx-3 mb-3 align-items-center justify-content-center" id="item-{{ item.product.id }}">
+      <div class="delete-item">
+        <form action="" id="delete-form">
+          {% csrf_token %}
+          <button type="submit" class="delete-button icon" data-id="{{ item.product.id }}"><i class="fa-solid fa-trash"></i></button>
+        </form>
+
+      </div>
+      <div class="item-image d-flex ms-md-5">
+        <img src="{{item.product.image}}" width="100" alt="">
+      </div>
+      <div class="item-desc ms-5  mt-md-2" style="width: 9rem; font-size: .9em;">
+        <p class="item-name text-wrap ">{{ item.product.name }}</p>
+        <p class="item-price">&#8358;{{ item.product.price }}</p>
+      </div>
+      <div class="update-items ms-md-5">
+        <form action="" id="update-form" class=" d-flex justify-content-center">
+          {% csrf_token %}
+          <button data-productId="{{ item.product.id }}" data-action="add" class="update-cart icon"><i class="fa-solid fa-plus"></i></button>
+          <p id="qty" class="mx-2 mt-3" data-productId="{{ item.product.id }}">0</p>
+          <button data-productId="{{ item.product.id }}" data-action="remove" class="update-cart icon"><i class="fa-solid fa-minus"></i></button>
+        </form>
+      </div>
+
+      <div class="item-total ms-md-4">
+        <p id="item-total-price" data-productId="{{ item.product.id }}">&#8358;0</p>
+      </div>
+
+
+    </div>
+    <div class="divider"></div>
+    {% endfor %}
+    
+  </div>
+</main>
+
+
+  
+
+{% endblock %}
