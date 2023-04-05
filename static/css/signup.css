@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,100&family=Satisfy&display=swap');
+
+input{
+  margin-top:20px;
+  height: 30px;
+  width: 150px;
+  border-radius: 5px;
+   
+}
+input[type="submit"]{
+  background-color: rgba(7, 179, 185, 0.753);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+}

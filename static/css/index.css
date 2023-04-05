@@ -1,0 +1,35 @@
+.shop {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-img-top {
+    background-color: whitesmoke;
+    border-radius: 5px;
+    width: 13em;
+    min-height: 10em;
+
+}
+
+.card {
+    border: none;
+    text-align: center;
+}
+
+.card-body {
+    gap: 100px;
+    margin-top: 10px;
+}
+
+.btns {
+    margin: 1px solid black;
+    background-color: black;
+    color: white;
+    padding: 7px 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
