@@ -16,6 +16,8 @@ $(document).ready(function () {
     updateBtn[i].addEventListener('click', function () {
       const action = this.dataset.action
       const btn = $(this)
+      console.log(action)
+      console.log(id)
      
 
       $.ajax({
